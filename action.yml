@@ -81,7 +81,10 @@ runs:
       env:
         PRIVATE_KEY: ${{ inputs.private_key }}
       run: |
-        echo "$PRIVATE_KEY" > private-key.pem
+        printf '%s' "$PRIVATE_KEY" | sed 's/\\n/\n/g' > private-key.pem
+
+        # Verify it looks correct
+        head -1 private-key.pem
 
         NOW=$(date +%s)
         EXP=$((NOW + 540))
