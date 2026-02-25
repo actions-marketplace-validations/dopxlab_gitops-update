@@ -78,11 +78,13 @@ runs:
     - name: Generate JWT
       id: jwt
       shell: bash
+      env:
+        PRIVATE_KEY: ${{ inputs.private_key }}
       run: |
-        echo "${{ inputs.private_key }}" > private-key.pem
+        echo "$PRIVATE_KEY" > private-key.pem
 
         NOW=$(date +%s)
-        EXP=$((NOW + 540)) # 9 minutes
+        EXP=$((NOW + 540))
 
         header=$(echo -n '{"alg":"RS256","typ":"JWT"}' | openssl base64 -A | tr '+/' '-_' | tr -d '=')
         payload=$(echo -n "{\"iat\":$NOW,\"exp\":$EXP,\"iss\":${{ inputs.app_id }}}" | openssl base64 -A | tr '+/' '-_' | tr -d '=')
@@ -92,7 +94,6 @@ runs:
           | openssl base64 -A | tr '+/' '-_' | tr -d '=')
 
         jwt="$header.$payload.$signature"
-
         echo "jwt=$jwt" >> $GITHUB_OUTPUT
 
     #################################################
