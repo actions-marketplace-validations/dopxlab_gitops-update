@@ -50,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Update Tag
-        uses: your-org/gitops-update-action@v1
+        uses: dopxlab/gitops-update@v1
         with:
           app_id: ${{ secrets.APP_ID }}
           installation_id: ${{ secrets.INSTALLATION_ID }}
